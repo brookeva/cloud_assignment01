@@ -7,3 +7,16 @@
 */
 
 -- Enter your SQL query here
+
+SELECT
+    EXTRACT(YEAR FROM start_time) AS trip_year,
+    EXTRACT(QUARTER FROM start_time) AS trip_quarter,
+    COUNT(*) AS num_trips
+FROM
+    your_table_name
+WHERE
+    duration < 10
+GROUP BY
+    trip_year, trip_quarter
+ORDER BY
+    trip_year, trip_quarter;

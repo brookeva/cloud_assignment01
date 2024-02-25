@@ -11,6 +11,17 @@
 
 -- Enter your SQL query here
 
+select count(*) as num_trips
+from indego.trips_2021_q3
+
+select count(*) as num_trips
+from indego.trips_2022_q3
+
+SELECT (
+        FROM trips_2022_q3.total_trips - trips_2021_q3.total_trips) / trips_2021_q3.total_trips * 100 AS perc_change
+FROM trips_2021_q3     
+JOIN 
+    trips_2022_q3 ON trips_2021_q3.total_trips = trips_2022_q3.total_trips;
 
 
 /*
