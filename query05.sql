@@ -5,7 +5,7 @@
 */
 
 -- Enter your SQL query here
-SELECT MAX(duration) FROM indego.trips_2021_q3;
---Max is 1440 minutes
-SELECT MAX(duration) FROM indego.trips_2022_q3;
---Max is 1440 minutes
+WITH temporaryTable AS (SELECT MAX(duration) AS max_duration FROM indego.trips_2021_q3
+UNION 
+SELECT MAX(duration) AS max_duration FROM indego.trips_2022_q3) 
+SELECT * FROM temporaryTable;
