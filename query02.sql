@@ -11,17 +11,34 @@
 
 -- Enter your SQL query here
 
-select count(*) as num_trips
-from indego.trips_2021_q3
+WITH TripCounts AS (
+    SELECT 
+        EXTRACT(YEAR FROM start_time) AS start_year, 
+        COUNT(*) AS num_trips 
+    FROM 
+        indego.trips_2021_q3 
+    GROUP BY 
+        EXTRACT(YEAR FROM start_time)
+    UNION ALL
+    SELECT 
+        EXTRACT(YEAR FROM start_time) AS start_year, 
+        COUNT(*) AS num_trips 
+    FROM 
+        indego.trips_2022_q3 
+    GROUP BY 
+        EXTRACT(YEAR FROM start_time)
+)
+SELECT 
+    T1.start_year AS Year1, 
+    T2.start_year AS Year2, 
+    T1.num_trips AS Trips_Year1, 
+    T2.num_trips AS Trips_Year2,
+    ROUND(((T2.num_trips - T1.num_trips) * 100.0 / T1.num_trips), 2) ::text || '%' AS perc_change
+FROM 
+    TripCounts T1, TripCounts T2
+WHERE 
+    T1.start_year < T2.start_year;
 
-select count(*) as num_trips
-from indego.trips_2022_q3
-
-SELECT (
-        FROM trips_2022_q3.total_trips - trips_2021_q3.total_trips) / trips_2021_q3.total_trips * 100 AS perc_change
-FROM trips_2021_q3     
-JOIN 
-    trips_2022_q3 ON trips_2021_q3.total_trips = trips_2022_q3.total_trips;
 
 
 /*
